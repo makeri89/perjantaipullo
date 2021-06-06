@@ -4,6 +4,7 @@ import ParticipantForm from './components/ParticipantForm'
 
 const App = () => {
   const [week, setWeek] = useState(0)
+  const [view, setView] = useState(true)
 
   useEffect(() => {
     const date = new Date()
@@ -14,18 +15,18 @@ const App = () => {
     setWeek(currentWeek)
   }, [])
 
-  const handleWeekChange = (e) => {
-    setWeek(e.target.value)
+  const viewChange = () => {
+    setView(!view)
   }
 
   return (
     <div>
       <h1>Perjantaipulloarvonta</h1>
-      <form>
-      Viikko: <input type='text' value={week} onChange={handleWeekChange} id='week' /><br/>
-      </form>
-      <WeeklyList week={week} />
-      <ParticipantForm />
+      <button onClick={viewChange}>Arvonta</button>
+      <button onClick={viewChange}>Lisää osallistuja</button>
+      {view === true
+        ? <WeeklyList initialWeek={week} />
+        : <ParticipantForm />}
     </div>
   )
 }

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=prod node index.js",
-    "dev": "NODE_ENV=test nodemon index.js"
+    "dev": "NODE_ENV=test nodemon index.js",
+    "build:ui": "rm -rf build && cd ../client/ && npm run build && cp -r build ../server"
   },
   "author": "",
   "license": "ISC",

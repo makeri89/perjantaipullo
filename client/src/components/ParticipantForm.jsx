@@ -13,7 +13,7 @@ const ParticipantForm = () => {
   const handleWeekChange = (e) => {
     setWeek(e.target.value)
   }
-  
+
   const addParticipant = (e) => {
     e.preventDefault()
     addNew({ name, week })

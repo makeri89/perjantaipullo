@@ -8,6 +8,7 @@ const Winner = require('./models/winner')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 const MONGODB_URI = process.env.NODE_ENV === 'test'
   ? process.env.TEST_MONGODB_URI
@@ -63,7 +64,7 @@ app.post('/api/participants', async (req, res) => {
   res.json(req.body)
 })
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

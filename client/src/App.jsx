@@ -3,7 +3,7 @@ import WeeklyList from './components/WeeklyList'
 import ParticipantForm from './components/ParticipantForm'
 
 const App = () => {
-  const [week, setWeek] = useState(0)
+  const [week, setWeek] = useState(23)
   const [view, setView] = useState(true)
 
   useEffect(() => {

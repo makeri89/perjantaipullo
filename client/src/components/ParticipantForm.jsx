@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { Button, Input } from '../components/styled'
 import { addNew } from '../services/participants'
 
 const ParticipantForm = () => {
@@ -25,9 +26,9 @@ const ParticipantForm = () => {
     <div>
       <h2>Lisää osallistuja</h2>
       <form onSubmit={addParticipant}>
-        Nimi: <input type='text' value={name} onChange={handleNameChange} id='name' required /><br/>
-        Viikko: <input type='text' value={week} onChange={handleWeekChange} id='week' required /><br/>
-        <button type='submit'>Lisää</button>
+        Nimi: <Input as='input' type='text' value={name} onChange={handleNameChange} id='name' required /><br/>
+        Viikko: <Input as='input' type='text' value={week} onChange={handleWeekChange} id='week' required /><br/>
+        <Button as='button' type='submit'>Lisää</Button>
       </form>
     </div>
   )

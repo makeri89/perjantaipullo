@@ -10,9 +10,24 @@ const winnerSchema = new mongoose.Schema({
     required: true
   },
   prize: {
+    name: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    }
+  },
+  value: {
+    type: Number,
+    required: true
+  },
+  leftover: {
     type: Number,
     required: true
   }
+
 })
 
 module.exports = mongoose.model('Winner', winnerSchema)

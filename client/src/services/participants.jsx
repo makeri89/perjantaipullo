@@ -11,8 +11,8 @@ const getByWeek = async (week) => {
   return response.data
 }
 
-const getWinner = async (week) => {
-  const response = await axios.get(`${baseUrl}/winner/${week}`)
+const getWeek = async () => {
+  const response = await axios.get('api/currentweek')
   return response.data
 }
 
@@ -21,4 +21,9 @@ const addNew = async (participant) => {
   return response.data
 }
 
-export { getAll, getByWeek, getWinner, addNew }
+export {
+  getAll,
+  getByWeek,
+  getWeek,
+  addNew
+}

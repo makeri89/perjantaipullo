@@ -16,6 +16,15 @@ const MONGODB_URI = process.env.NODE_ENV === 'test'
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
+const getCurrentWeek = () => {
+  const date = new Date()
+  date.setHours(0,0,0,0) // sets new date to midnight
+  const yearFirst = new Date(date.getFullYear(), 0, 1)
+  const days = Math.floor((date - yearFirst) / (1000 * 60 * 60 * 24))
+  const currentWeek = Math.round((days + 4) / 7) // adding 4 starts a new week on saturday
+  return currentWeek
+}
+
 app.get('/', (_req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
@@ -26,42 +35,63 @@ app.get('/api/participants', async (_req, res) => {
 })
 
 app.get('/api/participants/:week', async (req, res) => {
-  const week = Number(req.params.week)
+  let week = Number(req.params.week)
+  week = week || 0
   const weekly_participants = await Participant.find({ weeks: week })
   res.json(weekly_participants)
 })
 
-app.get('/api/participants/winner/:week', async (req, res) => {
+app.get('/api/winner', async (_req, res) => {
+  const winners = await Winner.find({})
+  res.json(winners)
+})
+
+app.get('/api/winner/:week', async (req, res) => {
   const week = Number(req.params.week)
-  let winner = await Winner.findOne({ week: week})
-  if (winner) {
-    res.json(winner)
-  } else {
-    const weekly_participants = await Participant.find({ weeks: week })
-    const participants = weekly_participants.length
-    const prize = participants * 3
-    const index = Math.floor(Math.random() * participants)
-    const winner = weekly_participants[index].name
-    const savedWinner = new Winner({ name: winner, week, prize })
-    savedWinner.save()
-    res.json(savedWinner)
-  }
-  
+  const winner = await Winner.findOne({ week: week })
+  res.json(winner)
+})
+
+app.get('/api/currentweek', (_req, res) => {
+  res.json(getCurrentWeek())
 })
 
 app.post('/api/participants', async (req, res) => {
   let participant_to_update = await Participant.findOne({ name: req.body.name })
   if (participant_to_update) {
     participant_to_update.weeks = participant_to_update.weeks.concat(req.body.week)
-    participant_to_update.save()
+    await participant_to_update.save()
   } else {
     participant_to_update = new Participant({
       name: req.body.name,
       weeks: [req.body.week]
     })
-    participant_to_update.save()
+    await participant_to_update.save()
   }
   res.json(req.body)
+})
+
+app.post('/api/winner', async (req, res) => {
+  const week = Number(req.body.week)
+  const weekly_participants = await Participant.find({ weeks: week })
+  const participants = weekly_participants.length
+  const value = participants * 3
+  const index = Math.floor(Math.random() * participants)
+  const winner_name = weekly_participants[index].name
+  const last_winner = await Winner.findOne({ week: week - 1 })
+  let leftover = value - req.body.prize.price
+  if (last_winner) {
+    leftover += last_winner.leftover
+  }
+  const savedWinner = new Winner({
+    name: winner_name,
+    week: week,
+    prize: req.body.prize,
+    value: value,
+    leftover: leftover
+  })
+  await savedWinner.save()
+  res.json(savedWinner)
 })
 
 const PORT = process.env.PORT || 3001

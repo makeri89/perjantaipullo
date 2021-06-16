@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 
 export const Title = styled.h1`
-  padding: 15px 0 0 0;
-  margin-bottom: -20px;
+  margin: 0 0 -10px 0;
 `
 
 export const SubTitle = styled.h2`
@@ -41,4 +40,22 @@ export const Input = styled.input`
 
 export const WeekInput = styled(Input)`
   width: 20px;
+`
+export const Modal = styled.div`
+  z-index: 1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: papayawhip;
+`
+
+export const ModalContent = styled.div`
+  margin: 5% auto;
+  padding: 10px;
+  border: 2px solid #e81438;
+  width: 40%;
+  border-radius: 5px;
 `
